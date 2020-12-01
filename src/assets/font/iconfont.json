@@ -1,0 +1,23 @@
+{
+  "id": "2238700",
+  "name": "登陆素材",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9466910",
+      "name": "登陆密码",
+      "font_class": "denglumima",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "749768",
+      "name": "登陆",
+      "font_class": "denglu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    }
+  ]
+}
