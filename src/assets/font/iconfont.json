@@ -6,6 +6,104 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8631654",
+      "name": "mima_显示密码",
+      "font_class": "mima_xianshimima",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "9448521",
+      "name": "锁",
+      "font_class": "suo",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "9572493",
+      "name": "锁",
+      "font_class": "IOTtubiao_huabanfuben",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "12686634",
+      "name": "锁",
+      "font_class": "icon_suo-",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "17734371",
+      "name": "ico bb zj zht",
+      "font_class": "icobbzjzht",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "17734384",
+      "name": "ico_bb_sx_tp",
+      "font_class": "ico_bb_sx_tp",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "17734385",
+      "name": "ico_bb_zj_zzt",
+      "font_class": "ico_bb_zj_zzt",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "17734386",
+      "name": "ico_bb_zj_zhb",
+      "font_class": "ico_bb_zj_zhb",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "5163343",
+      "name": "商品icon",
+      "font_class": "daizi-",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "5712921",
+      "name": "我的订单",
+      "font_class": "wodedingdan",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "6804021",
+      "name": "Lock-1",
+      "font_class": "Lock-",
+      "unicode": "e844",
+      "unicode_decimal": 59460
+    },
+    {
+      "icon_id": "8712566",
+      "name": "B-06商品管理",
+      "font_class": "-shangpinguanli",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "8713972",
+      "name": "06-商品管理",
+      "font_class": "-shangpinguanli1",
+      "unicode": "e6b5",
+      "unicode_decimal": 59061
+    },
+    {
+      "icon_id": "14745726",
+      "name": "客户",
+      "font_class": "kehu",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
       "icon_id": "9466910",
       "name": "登陆密码",
       "font_class": "denglumima",
