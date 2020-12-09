@@ -284,7 +284,22 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
+      }).catch(err => err)
+      // 确定删除 返回字符串 confirm
+      // 取消删除 返回字符串 cancel
+      // console.log(id, confirmResult)
+
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+
+      const { data: res } = await this.$http.delete('users/' + id)
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除用户失败！')
+      }
+      this.$message.success('删除用户成功')
+      this.getUserList()
+      // console.log(res)
     }
   }
 }
