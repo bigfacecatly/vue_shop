@@ -59,7 +59,7 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$http.post('login', this.loginForm)
-        if (res.meta.status !== 200) return this.$message.error('用户名或密码不正确')
+        if (res.meta.stats !== 200) return this.$message.error('用户名或密码不正确')
         this.$message.success('登陆成功')
         window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('/home')
