@@ -77,9 +77,9 @@
       </el-form>
       <!--      底部区-->
       <span slot="footer" class="dialog-footer">
-    <el-button @click="addDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="addUser">确 定</el-button>
-  </span>
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
     </el-dialog>
     <!--    修改用户的对话框-->
     <el-dialog title="修改用户" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
@@ -244,7 +244,7 @@ export default {
     async showEditDialog (id) {
       // console.log(id)
       const { data: res } = await this.$http.get('users/' + id)
-      console.log(res)
+      // console.log(res)
       if (res.meta.status !== 200) {
         return this.$message.error('查询用户信息失败！')
       }
