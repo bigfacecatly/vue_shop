@@ -15,7 +15,7 @@ cors = CORS(app, supports_credentials=True)
 # login_manager_local.session_protection = 'strong'
 # login_manager_local.login_view = 'login'
 
-from flask_login import login_required
+# from flask_login import login_required
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
@@ -616,6 +616,31 @@ def UpdateRoles(roleId):
     # print(resultRoles,roles_list)
 
     return jsonify({'data':x,'meta':meta})
+
+
+#分配角色
+@app.route('/api/users/<int:id>/role',methods=['PUT'])
+def distributionRoles(id):
+    if request.method == 'PUT':
+        for x in users_list['data']['users']:
+            if x['id'] == id:
+                data = json.loads(request.get_data().decode())
+                print(data)
+                rid = data['rid']
+                if rid == 30:
+                    x['role_name'] = "主管"
+                elif rid == 31:
+                    x['role_name'] = "测试负责人"
+                elif rid == 32:
+                    x['role_name'] = "产品负责人"
+                msg = {
+                    'msg':"设置角色成功",
+                    'status':200
+                }
+                # print(11111,x)
+                return jsonify({'data':x,'meta':msg})
+
+
 
 
 
