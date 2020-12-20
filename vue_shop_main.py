@@ -8,6 +8,7 @@ app = Flask(__name__)
 # 解决跨域问题
 cors = CORS(app, supports_credentials=True)
 
+
 # from flask_login import login_manager, UserMixin, login_required
 
 # login_manager_local = login_manager.LoginManager()
@@ -124,13 +125,13 @@ menus_dict = [
                 'path': 'rights',
                 'children': [
 
-                        {
-                            'id': 17,
-                            'authName': '添加权限',
-                            "path": "null",
-                            'pid': 11,
-                            'level': 2,
-                        }
+                    {
+                        'id': 17,
+                        'authName': '添加权限',
+                        "path": "null",
+                        'pid': 11,
+                        'level': 2,
+                    }
 
                 ],
                 'level': 1,
@@ -139,22 +140,21 @@ menus_dict = [
 
         ]
     },
-    #　商品 = 接口
     {
         'id': 3,
-        'authName': '接口管理',
+        'authName': '商品管理',
         "path": "null",
         'pid': 0,
         'level': 0,
         "children": [
             {
                 'id': 10,
-                'authName': '接口列表',
+                'authName': '商品列表',
                 'path': 'null',
                 'children': [
                     {
                         'id': 22,
-                        'authName': "添加接口",
+                        'authName': "添加商品",
                         'path': 'null'
                     }
                 ],
@@ -167,16 +167,14 @@ menus_dict = [
                 'path': 'null',
                 'children': [
 
-
-
                 ],
                 'level': 1,
                 'pid': 3
             },
             {
                 'id': 13,
-                'authName': '接口分类',
-                'path': 'null',
+                'authName': '商品分类',
+                'path': 'categories',
                 'children': [
                     {
 
@@ -187,14 +185,14 @@ menus_dict = [
                         'level': 2,
 
                     },
-{
-                            'id': 19,
-                            'authName': '修改分类',
-                            "path": "null",
-                            'pid': 13,
-                            'level': 2,
-                        },
-{
+                    {
+                        'id': 19,
+                        'authName': '修改分类',
+                        "path": "null",
+                        'pid': 13,
+                        'level': 2,
+                    },
+                    {
 
                         'id': 33,
                         'authName': '删除分类',
@@ -212,20 +210,20 @@ menus_dict = [
     {
         # 订单 = mock
         'id': 4,
-        'authName': 'mock管理',
+        'authName': '订单管理',
         "path": "null",
         'pid': 0,
         'level': 0,
         "children": [
             {
                 'id': 9,
-                'authName': 'mock列表',
+                'authName': '订单列表',
                 'path': 'null',
                 'children': [
                     {
 
                         'id': 26,
-                        'authName': '添加mock',
+                        'authName': '添加订单',
                         "path": "null",
                         'pid': 9,
                         'level': 2,
@@ -238,7 +236,7 @@ menus_dict = [
         ]
     },
     {
-        #　添加俩字 -- 日志
+        # 　添加俩字 -- 日志
         'id': 5,
         'authName': '日志数据统计',
         "path": "null",
@@ -343,6 +341,7 @@ id = 600
 @app.route('/api/users', methods=['GET', 'POST'])
 def userList():
     if request.method == 'GET':
+        print(555555)
         data = request.args.to_dict()
         users_list_data = deepcopy(users_list)
         users_list_data_user = []
@@ -354,6 +353,7 @@ def userList():
                         users_list_data_user.append(x)
             users_list_data['data']['users'] = users_list_data_user
             users_list_data['data']['total'] = len(users_list_data['data']['users'])
+            print(users_list_data)
             return jsonify(users_list_data)
     elif request.method == 'POST':
         global id
@@ -370,6 +370,7 @@ def userList():
         # print(users_list1)
         users_list1['meta']['state'] = 201
         return jsonify(users_list1)
+
     return jsonify(users_list)
 
 
@@ -581,10 +582,7 @@ def rolesDEL(id, childrenId):
                                     return jsonify({'data': x['children'], 'meta': meta})
 
 
-
-
-
-@app.route('/api/roles/<int:roleId>/rights',methods=['POST'])
+@app.route('/api/roles/<int:roleId>/rights', methods=['POST'])
 def UpdateRoles(roleId):
     data = json.loads(request.get_data().decode())
     datalist = data['rids']
@@ -606,20 +604,20 @@ def UpdateRoles(roleId):
             if int(x['id']) == int(y):
                 if x['id'] not in alist:
                     alist.append(x['id'])
-                    print(11111,x,resultRoles)
+                    print(11111, x, resultRoles)
                     resultRoles['children'].append(x)
 
     meta = {
-        'status':200,
-        'msg':'成功'
+        'status': 200,
+        'msg': '成功'
     }
     # print(resultRoles,roles_list)
 
-    return jsonify({'data':x,'meta':meta})
+    return jsonify({'data': x, 'meta': meta})
 
 
-#分配角色
-@app.route('/api/users/<int:id>/role',methods=['PUT'])
+# 分配角色
+@app.route('/api/users/<int:id>/role', methods=['PUT'])
 def distributionRoles(id):
     if request.method == 'PUT':
         for x in users_list['data']['users']:
@@ -634,19 +632,217 @@ def distributionRoles(id):
                 elif rid == 32:
                     x['role_name'] = "产品负责人"
                 msg = {
-                    'msg':"设置角色成功",
-                    'status':200
+                    'msg': "设置角色成功",
+                    'status': 200
                 }
                 # print(11111,x)
-                return jsonify({'data':x,'meta':msg})
+                return jsonify({'data': x, 'meta': msg})
 
 
+# 商品分类数据
+goods = [
+    {
+        'cate_id': 500,
+        'cate_name': '茄子',
+        'cate_pid': 0,
+        'cate_level': 0,
+        'cate_delete': 'false',
+        'children': [
+            {
+                'cate_id': 505,
+                'cate_name': '茄子1',
+                'cate_pid': 500,
+                'cate_level': 1,
+                'cate_delete': 'false',
+'children':[]
+            },
+        ]
+    },
+    {
+        'cate_id': 501,
+        'cate_name': '红烧猪蹄子',
+        'cate_pid': 0,
+        'cate_level': 0,
+        'cate_delete': 'true',
+        'children': [
+            {
+                'cate_id': 506,
+                'cate_name': '红烧猪蹄子',
+                'cate_pid': 501,
+                'cate_level': 1,
+                'cate_delete': 'true',
+'children':[]
+            },
+        ]
+    },
+    {
+        'cate_id': 502,
+        'cate_name': '苹果1',
+        'cate_pid': 0,
+        'cate_level': 0,
+        'cate_delete': 'false',
+        'children': []
+    },
+    {
+        'cate_id': 503,
+        'cate_name': '创世纪',
+        'cate_pid': 0,
+        'cate_level': 0,
+        'cate_delete': 'true',
+        'children': [
+            {
+                'cate_id': 504,
+                'cate_name': '创世纪1',
+                'cate_pid': 503,
+                'cate_level': 1,
+                'cate_delete': 'true',
+                'children': [
+                    {
+                        'cate_id': 505,
+                        'cate_name': '创世纪2',
+                        'cate_pid': 504,
+                        'cate_delete': 'true',
+                        'cate_level': 2,
+                    },
+                ]
+            },
+        ]
+    },
 
+]
+goodsId = 505
 
+@app.route('/api/categories', methods=['GET','POST'])
+def categoriesList():
+    if request.method == 'GET':
+        # type 1 一级分类  2是 1-2级分类 3是全部分类
+        # 页数跟页也是
+        date = request.args.to_dict()
+        # print(date)
+        date['type'] = int(date['type'] )
+        if date['type'] == 1:
+            goods1 = []
+            for x in goods:
+                if x['cate_level'] == 1:
+                    goods1.append(x)
+        elif date['type'] == 2:
+            # goods1 = []
+            # for x in goods:
+            #     print(x['cate_level'])
+            #     if x['cate_level'] == 0 or x['cate_level'] == 1:
+            #         goods1.append(x)
+            goods1 = [
+                {
+                    'cate_id': 500,
+                    'cate_name': '茄子',
+                    'cate_pid': 0,
+                    'cate_level': 0,
+                    'cate_delete': 'false',
+                    'children': [
+                        {
+                            'cate_id': 505,
+                            'cate_name': '茄子1',
+                            'cate_pid': 500,
+                            'cate_level': 1,
+                            'cate_delete': 'false',
+                        },
+                    ]
+                },
+                {
+                    'cate_id': 501,
+                    'cate_name': '红烧猪蹄子',
+                    'cate_pid': 0,
+                    'cate_level': 0,
+                    'cate_delete': 'true',
+                    'children': [
+                        {
+                            'cate_id': 506,
+                            'cate_name': '红烧猪蹄子',
+                            'cate_pid': 501,
+                            'cate_level': 1,
+                            'cate_delete': 'true',
+                        },
+                    ]
+                },
+                {
+                    'cate_id': 502,
+                    'cate_name': '苹果1',
+                    'cate_pid': 0,
+                    'cate_level': 0,
+                    'cate_delete': 'false',
+                },
+                {
+                    'cate_id': 503,
+                    'cate_name': '创世纪',
+                    'cate_pid': 0,
+                    'cate_level': 0,
+                    'cate_delete': 'true',
+                    'children': [
+                        {
+                            'cate_id': 504,
+                            'cate_name': '创世纪1',
+                            'cate_pid': 503,
+                            'cate_level': 1,
+                            'cate_delete': 'true'
+                        },
+                    ]
+                },
 
+            ]
+            meta = {
+                'msg': '查询成功',
+                'status': 200
+            }
+            total = len(goods1)
+            # print(goods1)
+            return jsonify({'data': goods1, 'meta': meta})
+        else:
+            goods1 = goods
+        # input('111111')
+        meta = {
+            'msg': '查询成功',
+            'status': 200
+        }
+        total = len(goods1)
+        data = {'result': goods1, 'total': total}
 
+        return jsonify({'data': data, 'meta': meta})
+    if request.method == 'POST':
+        global goodsId
+        goodsId += 1
+        data = json.loads(request.get_data().decode())
+        # print(1111111,data)
+        # input('99999')
+        good = {
+            'cate_id': goodsId,
+            'cate_name': data['cate_name'],
+            'cate_pid': data['cate_pid'],
+            'cate_level': data['cate_level']
+        }
+        if data['cate_level'] == 0:
 
+            goods.append(good)
+        elif data['cate_level'] == 1:
+            for x in goods:
+                if x['cate_id'] == data['cate_pid']:
+                    x['children'].append(good)
+                    # print(1111,x)
+                    # print(22222222,goods)
+        elif data['cate_level'] == 2:
+            for x in goods:
+                if len(x['children']) != 0:
+                    for y in x['children']:
+                        if y['cate_id'] == data['cate_pid']:
+                            # print(1111, y)
+                            y['children'].append(good)
 
+                            # print(22222222, goods)
+
+        meta = {
+            'msg':'创建成功',
+            'status': 201
+        }
+        return  jsonify({'data':good,'meta':meta})
 
 
 if __name__ == '__main__':
