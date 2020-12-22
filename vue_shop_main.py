@@ -164,7 +164,7 @@ menus_dict = [
             {
                 'id': 12,
                 'authName': '分类参数',
-                'path': 'null',
+                'path': 'params',
                 'children': [
 
                 ],
@@ -654,7 +654,7 @@ goods = [
                 'cate_pid': 500,
                 'cate_level': 1,
                 'cate_delete': 'false',
-'children':[]
+                'children': []
             },
         ]
     },
@@ -671,7 +671,7 @@ goods = [
                 'cate_pid': 501,
                 'cate_level': 1,
                 'cate_delete': 'true',
-'children':[]
+                'children': []
             },
         ]
     },
@@ -712,14 +712,17 @@ goods = [
 ]
 goodsId = 505
 
-@app.route('/api/categories', methods=['GET','POST'])
+
+@app.route('/api/categories', methods=['GET', 'POST'])
 def categoriesList():
     if request.method == 'GET':
         # type 1 一级分类  2是 1-2级分类 3是全部分类
         # 页数跟页也是
         date = request.args.to_dict()
         # print(date)
-        date['type'] = int(date['type'] )
+        if 'type' not in date.keys():
+            date['type'] = 4
+        date['type'] = int(date['type'])
         if date['type'] == 1:
             goods1 = []
             for x in goods:
@@ -796,6 +799,12 @@ def categoriesList():
             total = len(goods1)
             # print(goods1)
             return jsonify({'data': goods1, 'meta': meta})
+        elif date['type'] == 4:
+            meta = {
+                'msg': '查询成功',
+                'status': 200
+            }
+            return jsonify({'data': goods, 'meta': meta})
         else:
             goods1 = goods
         # input('111111')
@@ -839,11 +848,191 @@ def categoriesList():
                             # print(22222222, goods)
 
         meta = {
-            'msg':'创建成功',
+            'msg': '创建成功',
             'status': 201
         }
-        return  jsonify({'data':good,'meta':meta})
+        return jsonify({'data': good, 'meta': meta})
 
+
+attributesOnlyList = [
+    {
+        'attr_id': 2,
+        'attr_name': '静态版式',
+        'cate_id': 505,
+        'attr_sel': 'only',
+        'attr_write': '',
+        'attr_vals': '好看 超好看 静态' #可选项 空格分割
+    }
+]
+
+attributesManyList = [
+    {
+        'attr_id': 1,
+        'attr_name': '动态版式',
+        'cate_id': 505,
+        'attr_sel': 'many',
+        'attr_write': 'list',
+        'attr_vals': '动态 嗯，不错 你猜猜' #可选项 空格分割
+    },
+]
+
+attr_id = 10
+@app.route('/api/categories/<int:id>/attributes', methods=['GET', 'POST'])
+def attributes(id):
+    if request.method == 'GET':
+        data = request.args.to_dict()
+        print(2222, data)
+        # input('dddd')
+        sel = data['sel']
+        # 静态参数
+        # result = {
+        #     'attr_id': 1,
+        #     'attr_name': '静态版式',
+        #     'cate_id': 505,
+        #     'attr_sel': '',
+        #     'attr_write': '',
+        #     'attr_vals': '1,2,3'
+        # }
+        meta = {
+            'msg': '',
+            'status': 200
+        }
+        if id == 505 and sel == 'only':
+            # result['attr_sel'] = 'only'
+            # result['attr_write'] = 'manual'
+            # result['attr_vals'] = ''
+            return jsonify({'data': attributesOnlyList, 'meta': meta})
+        # 动态参数
+        if id == 505 and sel == 'many':
+            # result['attr_sel'] = 'many'
+            # result['attr_write'] = 'list'
+            # result['attr_name'] = '动态版式'
+            return jsonify({'data': attributesManyList, 'meta': meta})
+    elif request.method == 'POST':
+        global attr_id
+        attr_id += 1
+        data = json.loads(request.get_data().decode())
+        attr_name = data['attr_name']
+        attr_sel = data['attr_sel']
+        print(4444,data)
+        # input('333333')
+        result = {
+            'attr_id': attr_id,
+            'attr_name': attr_name,
+            'cate_id': id,
+            'attr_sel': attr_sel,
+            'attr_write': '',
+            'attr_vals': ''
+        }
+        if attr_sel == 'many':
+            attributesManyList.append(result)
+        elif attr_sel == 'only':
+            attributesOnlyList.append(result)
+        meta = {
+            'msg': '',
+            'status': 201
+        }
+        return jsonify({'data':data,'meta':meta})
+
+
+@app.route('/api/categories/<int:cateId>/attributes/<int:attr_id>',methods=['GET','PUT','DELETE'])
+def findCategories(cateId,attr_id):
+    if request.method == 'GET':
+        data = request.args.to_dict()
+
+        # print(data)
+        # input('2222')
+        sel = data['attr_sel']
+        meta = {
+            'msg':'',
+            'status':200
+        }
+        if sel == 'only':
+            for x in attributesOnlyList:
+                if x['attr_id'] == attr_id and x['cate_id'] == cateId:
+                    return jsonify({'data':x,'meta':meta})
+        elif sel == 'many':
+            for x in attributesManyList:
+                if x['attr_id'] == attr_id and x['cate_id'] == cateId:
+                    return jsonify({'data': x, 'meta': meta})
+    elif request.method == 'PUT':
+        data = json.loads(request.get_data().decode())
+        print(2222,data)
+        # input('@@@@@@@@@')
+        attr_name = data['attr_name']
+        attr_sel = data['attr_sel']
+        data1= ''
+        if attr_sel == 'only':
+            for x in attributesOnlyList:
+                if x['attr_id'] == attr_id:
+                    x['attr_name'] = attr_name
+                    x['attr_vals'] = data['attr_vals']
+                    data1 = x
+        elif attr_sel == 'many':
+            for x in attributesManyList:
+                if x['attr_id'] == attr_id:
+                    x['attr_name'] = attr_name
+                    x['attr_vals'] = data['attr_vals']
+                    data1 = x
+        meta = {
+            'msg':'',
+            'status':200
+        }
+        return jsonify({'data':data1,'meta':meta})
+    elif request.method == 'DELETE':
+        for x in range(len(attributesManyList)):
+            if attributesManyList[x]['attr_id'] == attr_id:
+                del attributesManyList[x]
+        for x in range(len(attributesOnlyList)):
+            if attributesOnlyList[x]['attr_id'] == attr_id:
+                del attributesOnlyList[x]
+        meta = {
+           'msg':'删除成功',
+           'status':200
+        }
+        return jsonify({'data':'','meta':meta})
+
+# @app.route('/api/categories/<int:id>/attributes/<int:attr_id>',methods=['DELETE','PUT'])
+# def attributesDel(id,attr_id):
+#     if request.method == 'DELETE':
+#         for x in range(len(attributesManyList)):
+#             if attributesManyList[x]['attr_id'] == attr_id:
+#                 del attributesManyList[x]
+#         for x in range(len(attributesOnlyList)):
+#             if attributesOnlyList[x]['attr_id'] == attr_id:
+#                 del attributesOnlyList[x]
+#         meta = {
+#            'msg':'删除成功',
+#            'status':200
+#         }
+#         return jsonify({'data':'','meta':meta})
+#     elif request.method == 'PUT':
+#         data = json.loads(request.get_data().decode())
+#         # print(data)
+#         attr_sel = data['attr_sel']
+#         data1 = ''
+#         if attr_sel == 'many':
+#             for x in attributesManyList:
+#                 if x['attr_id'] == attr_id:
+#                     x['attr_name'] = data['attr_name']
+#                     x['attr_vals'] = data['attr_vals']
+#                     data1 = x
+#         elif attr_sel == 'only':
+#             for x in attributesOnlyList:
+#                 if x['attr_id'] == attr_id:
+#                     x['attr_name'] = data['attr_name']
+#                     x['attr_vals'] = data['attr_vals']
+#                     data1 = x
+#         meta = {
+#             'msg':'',
+#             'status':200
+#         }
+#         return jsonify({'data':data1,'meta':meta})
+
+
+
+
+########从这里开始 功能数据全部写死 没时间搞那么多了 写学好前端
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
