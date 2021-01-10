@@ -1,5 +1,9 @@
 import json
+import os
 import datetime
+import random
+import string
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from copy import deepcopy
@@ -150,7 +154,7 @@ menus_dict = [
             {
                 'id': 10,
                 'authName': '商品列表',
-                'path': 'null',
+                'path': 'goods',
                 'children': [
                     {
                         'id': 22,
@@ -857,26 +861,44 @@ def categoriesList():
 attributesOnlyList = [
     {
         'attr_id': 2,
-        'attr_name': '静态版式',
+        'attr_name': '静态版式1',
         'cate_id': 505,
         'attr_sel': 'only',
         'attr_write': '',
-        'attr_vals': '好看 超好看 静态' #可选项 空格分割
+        'attr_vals': '好看 超好看 静态'  # 可选项 空格分割
+    },
+{
+        'attr_id': 3,
+        'attr_name': '静态版式2',
+        'cate_id': 506,
+        'attr_sel': 'only',
+        'attr_write': '',
+        'attr_vals': '好看 超好看 静态'  # 可选项 空格分割
     }
 ]
 
 attributesManyList = [
     {
         'attr_id': 1,
-        'attr_name': '动态版式',
+        'attr_name': '动态版式1',
         'cate_id': 505,
         'attr_sel': 'many',
         'attr_write': 'list',
-        'attr_vals': '动态 嗯，不错 你猜猜' #可选项 空格分割
+        'attr_vals': '动态 嗯，不错 你猜猜 哈哈，得了， nihaoc'  # 可选项 空格分割
+    },
+{
+        'attr_id': 0,
+        'attr_name': '动态版式2',
+        'cate_id': 506,
+        'attr_sel': 'many',
+        'attr_write': 'list',
+        'attr_vals': '1动态 1嗯，1不错 1你猜猜 1哈哈，1得了， nihaoc'  # 可选项 空格分割
     },
 ]
 
 attr_id = 10
+
+
 @app.route('/api/categories/<int:id>/attributes', methods=['GET', 'POST'])
 def attributes(id):
     if request.method == 'GET':
@@ -914,7 +936,7 @@ def attributes(id):
         data = json.loads(request.get_data().decode())
         attr_name = data['attr_name']
         attr_sel = data['attr_sel']
-        print(4444,data)
+        print(4444, data)
         # input('333333')
         result = {
             'attr_id': attr_id,
@@ -932,11 +954,11 @@ def attributes(id):
             'msg': '',
             'status': 201
         }
-        return jsonify({'data':data,'meta':meta})
+        return jsonify({'data': data, 'meta': meta})
 
 
-@app.route('/api/categories/<int:cateId>/attributes/<int:attr_id>',methods=['GET','PUT','DELETE'])
-def findCategories(cateId,attr_id):
+@app.route('/api/categories/<int:cateId>/attributes/<int:attr_id>', methods=['GET', 'PUT', 'DELETE'])
+def findCategories(cateId, attr_id):
     if request.method == 'GET':
         data = request.args.to_dict()
 
@@ -944,24 +966,24 @@ def findCategories(cateId,attr_id):
         # input('2222')
         sel = data['attr_sel']
         meta = {
-            'msg':'',
-            'status':200
+            'msg': '',
+            'status': 200
         }
         if sel == 'only':
             for x in attributesOnlyList:
                 if x['attr_id'] == attr_id and x['cate_id'] == cateId:
-                    return jsonify({'data':x,'meta':meta})
+                    return jsonify({'data': x, 'meta': meta})
         elif sel == 'many':
             for x in attributesManyList:
                 if x['attr_id'] == attr_id and x['cate_id'] == cateId:
                     return jsonify({'data': x, 'meta': meta})
     elif request.method == 'PUT':
         data = json.loads(request.get_data().decode())
-        print(2222,data)
+        print(2222, data)
         # input('@@@@@@@@@')
         attr_name = data['attr_name']
         attr_sel = data['attr_sel']
-        data1= ''
+        data1 = ''
         if attr_sel == 'only':
             for x in attributesOnlyList:
                 if x['attr_id'] == attr_id:
@@ -975,10 +997,10 @@ def findCategories(cateId,attr_id):
                     x['attr_vals'] = data['attr_vals']
                     data1 = x
         meta = {
-            'msg':'',
-            'status':200
+            'msg': '',
+            'status': 200
         }
-        return jsonify({'data':data1,'meta':meta})
+        return jsonify({'data': data1, 'meta': meta})
     elif request.method == 'DELETE':
         for x in range(len(attributesManyList)):
             if attributesManyList[x]['attr_id'] == attr_id:
@@ -987,10 +1009,11 @@ def findCategories(cateId,attr_id):
             if attributesOnlyList[x]['attr_id'] == attr_id:
                 del attributesOnlyList[x]
         meta = {
-           'msg':'删除成功',
-           'status':200
+            'msg': '删除成功',
+            'status': 200
         }
-        return jsonify({'data':'','meta':meta})
+        return jsonify({'data': '', 'meta': meta})
+
 
 # @app.route('/api/categories/<int:id>/attributes/<int:attr_id>',methods=['DELETE','PUT'])
 # def attributesDel(id,attr_id):
@@ -1029,7 +1052,144 @@ def findCategories(cateId,attr_id):
 #         }
 #         return jsonify({'data':data1,'meta':meta})
 
+goods_list = [
+    {
+        'goods_id': 1,
+        'goods_name': '手机1我是填充字符效果的东西我是填充字符效果的东西我是填充字符效果的东西',
+        'goods_price': 1000,
+        'goods_number': 5,
+        'goods_weight': 100,
+        'good_state': 'null',
+        'add_time': 1512954923,
+        'upd_time': 1512954923,
+        'host_number': 0,
+        'is_promote': 'false'
+    },
+    {
+        'goods_id': 2,
+        'goods_name': '手机2',
+        'goods_price': 1000,
+        'goods_number': 5,
+        'goods_weight': 100,
+        'good_state': 'null',
+        'add_time': 1512954923,
+        'upd_time': 1512954923,
+        'host_number': 0,
+        'is_promote': 'false'
+    },
+    {
+        'goods_id': 3,
+        'goods_name': '手机3',
+        'goods_price': 1000,
+        'goods_number': 5,
+        'goods_weight': 100,
+        'good_state': 'null',
+        'add_time': 1512954923,
+        'upd_time': 1512954923,
+        'host_number': 0,
+        'is_promote': 'false'
+    }
+]
 
+goods_id = 4
+
+
+@app.route('/api/goods', methods=['GET','POST'])
+def Goods():
+    if request.method == 'GET':
+        total = len(goods_list)
+        data = request.args.to_dict()
+        print(1111, data)
+        query = data['query']
+        # input('##########')
+        meta = {
+            'msg': '',
+            'status': 200
+        }
+        if query:
+            goods_list1 = []
+            for x in goods_list:
+                if query in x['goods_name']:
+                    goods_list1.append(x)
+            return jsonify({'data': {'goods': goods_list1, 'total': total}, 'meta': meta})
+
+        return jsonify({'data': {'goods': goods_list, 'total': total}, 'meta': meta})
+    elif request.method == 'POST':
+        global goods_id
+        goods_id += 1
+        # data = request.form.to_dict()
+        data = json.loads(request.get_data().decode())
+        print(f'111111{data}')
+        # input('@@@@')
+        dict1 = {
+            'goods_id': goods_id,
+            'goods_name': data['goods_name'],
+            'goods_price': data['goods_price'],
+            'goods_number': data['goods_number'],
+            'goods_weight': data['goods_weight'],
+            'good_state': 'null',
+            'add_time': 1512954923,
+            'upd_time': 1512954923,
+            'host_number': 'null',
+            'is_promote': 'false',
+            'goods_weight': data['goods_weight'],
+            'goods_cate': data['goods_cate'],  #1,2,3 商品分类登记
+            'goods_introduce':data['goods_introduce'],
+            'pics':data['pics'],
+            'attrs':data['attrs']
+        }
+        goods_list.append(dict1)
+
+        meta = {
+            'msg':'添加成功',
+            'status':201
+        }
+    return jsonify({'data':dict1,'meta':meta})
+
+@app.route('/api/goods/<int:id>', methods=['DELETE'])
+def delGoods(id):
+    if request.method == 'DELETE':
+        for x in goods_list:
+            if x['goods_id'] == id:
+                goods_list.remove(x)
+                meta = {
+                    'status': 200,
+                    'msg': '删除成功'
+                }
+                return jsonify({'data': '', 'meta': meta})
+
+basedir = os.path.abspath(os.path.dirname(__file__)) #定义一个根目录 用于保存图片用
+path = basedir + "/static/img/"          #定义一个图片存放的位置 存放在static下面
+@app.route('/api/upload',methods=['POST'])
+def upload():
+    files = request.files
+
+    print(f'file{files}')
+    # 生成随机字符串，防止图片名字重复
+    ran_str = ''.join(random.sample(string.ascii_letters + string.digits, 16))
+    # 获取图片文件
+    img = request.files.get('file')
+    #定义一个图片存放的位置 存放在static下面
+    path = basedir + "/static/img/"
+    #图片名称 给图片重命名 为了图片名称的唯一性
+    imgName = ran_str + img.filename
+    #图片path和名称组成图片的保存路径
+    file_path = path + imgName
+    #保存图片
+    img.save(file_path)
+    #这个是图片的访问路径，需返回前端（可有可无）
+    url = '/static/img/'+imgName
+    # print(1111, f'file{imgName},获取图片文件{img}')
+    # input('@@@@@@')
+    data = {
+       'tmp_path':url,
+        'url': f'http://127.0.0.1:8080/{url}'
+    }
+    meta = {
+        'msg':'上传成功',
+        'status':200
+    }
+    return jsonify({'meta':meta,'data':data})
 
 
 ########从这里开始 功能数据全部写死 没时间搞那么多了 写学好前端
