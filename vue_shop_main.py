@@ -215,14 +215,14 @@ menus_dict = [
         # 订单 = mock
         'id': 4,
         'authName': '订单管理',
-        "path": "null",
+        "path": "pull",
         'pid': 0,
         'level': 0,
         "children": [
             {
                 'id': 9,
                 'authName': '订单列表',
-                'path': 'null',
+                'path': 'orders',
                 'children': [
                     {
 
@@ -1192,7 +1192,101 @@ def upload():
     return jsonify({'meta':meta,'data':data})
 
 
+goods_orders = [
+    {
+        'order_id':1,
+        'user_id':500,
+        'order_number':'itcaset-32424de',
+        'order_pice':231,
+        'order_pay':'1',
+        'is_send':'是',
+        'trade_no':'',
+        'order_fapiao_title':'个人',
+        'order_fapiao_company':'',
+        'order_fapiao_content':'办公用品',
+        'consignee_addr':'a:7:{"cgn_name":"王二","cgn_address":"中国"}',
+        'pay_status':'1',
+        'create_time':1508331565,
+        'update_time':1508331565
+    },
+{
+        'order_id':2,
+        'user_id':500,
+        'order_number':'11111itcaset-32424de',
+        'order_pice':2311,
+        'order_pay':'0',
+        'is_send':'否',
+        'trade_no':'',
+        'order_fapiao_title':'个人',
+        'order_fapiao_company':'',
+        'order_fapiao_content':'办公用品',
+        'consignee_addr':'a:7:{"cgn_name":"王二","cgn_address":"中国"}',
+        'pay_status':'0',
+        'create_time':1508331565,
+        'update_time':1508331565
+    },
+]
+
+
 ########从这里开始 功能数据全部写死 没时间搞那么多了 写学好前端
+@app.route('/api/orders',methods=['GET',"POST"])
+def orders():
+    total = len(goods_orders)
+    data1 = request.args.to_dict()
+    query = data1['query']
+    pagenum = data1['pagenum']
+    pagesize = data1['pagesize']
+    meta = {
+        'msg': '获取成功',
+        'status':200
+    }
+    print(f'1111111{data1}')
+    # input('#####')
+    if not query:
+        data = {
+            "total":total,
+            "pagenum":pagenum,
+            "pagesize":pagesize,
+            'goods':goods_orders
+        }
+
+        return jsonify({'data':data,'meta':meta})
+    else:
+        goods_orders_bak = []
+        for x in goods_orders:
+            if query in x.values():
+                goods_orders_bak.append(x)
+        data = {
+            "total": total,
+            "pagenum": pagenum,
+            "pagesize": pagesize,
+            'goods': goods_orders
+        }
+        return jsonify({'data': data, 'meta': meta})
+
+datakuaidi = [
+    {
+        'time':'2021-01-21 09:21:12',
+        'ftime':'2021-01-21 19:21:12',
+        'context': '已签收，感谢使用顺丰，期待再次为您服务',
+        'location': ''
+    },{
+        'time':'2021-01-23 09:21:12',
+        'ftime':'2021-01-23 19:21:12',
+        'context': '[北京市]北京市通州区新建村小区营业点派件员 xxx 顺丰速运 95281正在为您派件',
+        'location': ''
+    }
+]
+@app.route('/api/kuaidi/<int:id>')
+def kuaidi(id):
+    data = datakuaidi
+    meta = {
+        'msg':'获取成功',
+        'status':200
+    }
+    return jsonify({'data':data,'meta':meta})
+
+
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
