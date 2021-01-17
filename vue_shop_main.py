@@ -242,15 +242,15 @@ menus_dict = [
     {
         # 　添加俩字 -- 日志
         'id': 5,
-        'authName': '日志数据统计',
+        'authName': '数据统计',
         "path": "null",
         'pid': 0,
         'level': 0,
         "children": [
             {
                 'id': 6,
-                'authName': '日志数据',
-                'path': 'null',
+                'authName': '数据报表',
+                'path': 'reports',
                 'children': [
                     {
                         'id': 28,
@@ -1286,6 +1286,48 @@ def kuaidi(id):
     }
     return jsonify({'data':data,'meta':meta})
 
+@app.route('/api/reports/type/1')
+def reportsLine():
+    data = {
+        'label':'西北',
+        'value':3000
+    }
+    options = {
+        'data':data,
+        'title':{
+            'text':'用户来源'
+        },
+        'tooltip': {
+            'trigger':'axis',
+            'axisPointer': {
+                'type': 'cross',
+                'label': {
+                    'backgroundColor':'#E9EEF3'
+                }
+            }
+        },
+        'grid':{
+            'left':'3%',
+            'right':'3%',
+            'botton':'3%',
+            'containLabel':'true',
+        },
+        'xAxis': [
+            {
+                'boundaryGap':'false'
+            }
+        ],
+        'yAxis': [
+            {
+                'type':'value'
+            }
+        ]
+    }
+    meta = {
+        'msg':'获取成功！',
+        'status':200
+    }
+    return jsonify({'data':options,'meta':meta})
 
 
 if __name__ == '__main__':

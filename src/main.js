@@ -15,6 +15,7 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
+import * as ECharts from 'echarts'
 
 // 配置axios
 import axios from 'axios'
@@ -25,7 +26,7 @@ axios.interceptors.request.use(config => {
   return config
 })
 Vue.prototype.$http = axios
-
+Vue.prototype.$ECharts = ECharts
 Vue.config.productionTip = false
 
 Vue.component('tree-table', TreeTable)

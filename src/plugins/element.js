@@ -5,7 +5,6 @@ import {
   TableColumn, Switch, Tooltip, Pagination, Dialog, MessageBox, Tag, Tree, Select, Option,
   Cascader, Alert, Tabs, TabPane, Steps, Step, CheckboxGroup, Checkbox, Upload, Timeline, TimelineItem
 } from 'element-ui'
-
 // import Timeline from './timeline/index.js'
 // import TimelineItem from './timeline-item/index.js'
 
