@@ -13,14 +13,6 @@ app = Flask(__name__)
 cors = CORS(app, supports_credentials=True)
 
 
-# from flask_login import login_manager, UserMixin, login_required
-
-# login_manager_local = login_manager.LoginManager()
-# login_manager_local.init_app(app)
-# login_manager_local.session_protection = 'strong'
-# login_manager_local.login_view = 'login'
-
-# from flask_login import login_required
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
@@ -212,7 +204,7 @@ menus_dict = [
         ]
     },
     {
-        # 订单 = mock
+        # 订单
         'id': 4,
         'authName': '订单管理',
         "path": "pull",
@@ -240,7 +232,7 @@ menus_dict = [
         ]
     },
     {
-        # 　添加俩字 -- 日志
+        # 　添加
         'id': 5,
         'authName': '数据统计',
         "path": "null",
@@ -394,11 +386,10 @@ def update_users(id):
         # print(id)
         for x in users_list['data']['users']:
             if x['id'] == id:
-                # print(100000000)
                 data = {
                     'id': id,
                     'username': x['username'],
-                    'role_id': '暂无',  ##################################################
+                    'role_id': '暂无',
                     'mobile': x['mobile'],
                     'email': x['email']
                 }
@@ -733,11 +724,6 @@ def categoriesList():
                 if x['cate_level'] == 1:
                     goods1.append(x)
         elif date['type'] == 2:
-            # goods1 = []
-            # for x in goods:
-            #     print(x['cate_level'])
-            #     if x['cate_level'] == 0 or x['cate_level'] == 1:
-            #         goods1.append(x)
             goods1 = [
                 {
                     'cate_id': 500,
@@ -906,29 +892,14 @@ def attributes(id):
         print(2222, data)
         # input('dddd')
         sel = data['sel']
-        # 静态参数
-        # result = {
-        #     'attr_id': 1,
-        #     'attr_name': '静态版式',
-        #     'cate_id': 505,
-        #     'attr_sel': '',
-        #     'attr_write': '',
-        #     'attr_vals': '1,2,3'
-        # }
         meta = {
             'msg': '',
             'status': 200
         }
         if id == 505 and sel == 'only':
-            # result['attr_sel'] = 'only'
-            # result['attr_write'] = 'manual'
-            # result['attr_vals'] = ''
             return jsonify({'data': attributesOnlyList, 'meta': meta})
         # 动态参数
         if id == 505 and sel == 'many':
-            # result['attr_sel'] = 'many'
-            # result['attr_write'] = 'list'
-            # result['attr_name'] = '动态版式'
             return jsonify({'data': attributesManyList, 'meta': meta})
     elif request.method == 'POST':
         global attr_id
@@ -1015,42 +986,6 @@ def findCategories(cateId, attr_id):
         return jsonify({'data': '', 'meta': meta})
 
 
-# @app.route('/api/categories/<int:id>/attributes/<int:attr_id>',methods=['DELETE','PUT'])
-# def attributesDel(id,attr_id):
-#     if request.method == 'DELETE':
-#         for x in range(len(attributesManyList)):
-#             if attributesManyList[x]['attr_id'] == attr_id:
-#                 del attributesManyList[x]
-#         for x in range(len(attributesOnlyList)):
-#             if attributesOnlyList[x]['attr_id'] == attr_id:
-#                 del attributesOnlyList[x]
-#         meta = {
-#            'msg':'删除成功',
-#            'status':200
-#         }
-#         return jsonify({'data':'','meta':meta})
-#     elif request.method == 'PUT':
-#         data = json.loads(request.get_data().decode())
-#         # print(data)
-#         attr_sel = data['attr_sel']
-#         data1 = ''
-#         if attr_sel == 'many':
-#             for x in attributesManyList:
-#                 if x['attr_id'] == attr_id:
-#                     x['attr_name'] = data['attr_name']
-#                     x['attr_vals'] = data['attr_vals']
-#                     data1 = x
-#         elif attr_sel == 'only':
-#             for x in attributesOnlyList:
-#                 if x['attr_id'] == attr_id:
-#                     x['attr_name'] = data['attr_name']
-#                     x['attr_vals'] = data['attr_vals']
-#                     data1 = x
-#         meta = {
-#             'msg':'',
-#             'status':200
-#         }
-#         return jsonify({'data':data1,'meta':meta})
 
 goods_list = [
     {
@@ -1228,7 +1163,6 @@ goods_orders = [
 ]
 
 
-########从这里开始 功能数据全部写死 没时间搞那么多了 写学好前端
 @app.route('/api/orders',methods=['GET',"POST"])
 def orders():
     total = len(goods_orders)

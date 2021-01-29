@@ -230,9 +230,9 @@ export default {
       })
     },
     // 点击按钮，展示修改的对话框
-    async showEditDialog (attr_id) {
+    async showEditDialog (attrId) {
       // 查询当前参数的信息
-      const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`, {
+      const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes/${attrId}`, {
         params: { attr_sel: this.activeName }
       })
       console.log(res)
@@ -263,7 +263,7 @@ export default {
       })
     },
     // 根据ID删除对应参数项
-    async removeParams (attr_id) {
+    async removeParams (attrId) {
       console.log('删除')
       const confirmResult = await this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -275,7 +275,7 @@ export default {
         return this.$message.info('已取消删除操作！')
       }
       // 删除的业务逻辑
-      const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
+      const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attrId}`)
       if (res.meta.status !== 200) {
         return this.$message.error('删除参数失败！')
       }
@@ -322,7 +322,7 @@ export default {
     },
     // 删除对应参数可选项
     handleClose (i, row) {
-      row.attr_vals.splice(i,1)
+      row.attr_vals.splice(i, 1)
       this.saveAttrVals(row)
     }
   },

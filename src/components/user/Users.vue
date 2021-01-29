@@ -212,6 +212,7 @@ export default {
   },
   created () {
     this.getUserList()
+    console.log('####################created')
   },
   methods: {
     async getUserList () {
